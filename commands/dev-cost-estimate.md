@@ -12,8 +12,13 @@ Run these commands to understand the codebase:
 
 ```bash
 git log --oneline | wc -l                          # total commits
-git log --pretty=format:"%ad" --date=short | sort -u | head -1  # first commit date
-git log --pretty=format:"%ad" --date=short | sort -u | tail -1  # last commit date
+
+# First SUBSTANTIVE commit — skip init/initial/scaffold commits that have no real code
+git log --reverse --pretty=format:"%ad %s" --date=short | grep -viE '^\S+ (init|initial commit|initial|scaffold|create repo|first commit|add readme|repo init)$' | head -1
+
+# Last commit date
+git log -1 --pretty=format:"%ad" --date=short
+
 git diff --stat $(git rev-list --max-parents=0 HEAD) HEAD 2>/dev/null | tail -1  # total insertions/deletions
 git ls-files | wc -l                               # total tracked files
 git ls-files | grep -E '\.(ts|tsx|js|jsx)$' | wc -l   # TS/JS files
@@ -86,6 +91,7 @@ Use these 2025–2026 US market rate benchmarks:
 
 **Claude cost** (Pro subscription): $20/month. Prorate to calendar days used.
 `claude_cost = (calendar_days / 30) * 20`
+Use calendar days from first substantive commit to last commit — not from `git init`.
 
 ## Step 5 — Output the Report
 
@@ -103,9 +109,9 @@ Format the report exactly as shown below. Use actual numbers from your analysis.
 PROJECT SNAPSHOT
 ----------------
   Repository:     [git remote origin or folder name]
-  First commit:   [date]
+  First commit:   [date of first substantive commit — skip init/scaffold commits]
   Last commit:    [date]
-  Calendar span:  [X days / X weeks / X months]
+  Calendar span:  [X days / X weeks / X months, calculated from first substantive commit]
   Total commits:  [N]
   Files tracked:  [N]
   Lines of code:  [N insertions from git diff stat]
