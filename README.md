@@ -2,20 +2,47 @@
 
 A collection of custom Claude Code slash commands for developer productivity.
 
+## How it works
+
+Claude Code automatically loads any `.md` file placed in `~/.claude/commands/` as a slash command. No config, no registration, no restart — just drop the file in and the command is live.
+
 ## Installation
 
-Copy any command from `commands/` to your `~/.claude/commands/` directory:
+### Option 1 — Copy a single skill
 
 ```bash
-cp commands/dev-cost-estimate.md ~/.claude/commands/
+curl -o ~/.claude/commands/dev-cost-estimate.md \
+  https://raw.githubusercontent.com/seeder-works-studio/claude-custom-skills/main/commands/dev-cost-estimate.md
 ```
 
-Or clone and symlink the whole directory:
+### Option 2 — Clone and symlink all skills (recommended)
+
+New skills you add to the repo instantly become available with no extra steps.
 
 ```bash
-git clone https://github.com/seeder-works-studio/claude-custom-skills.git
-ln -s $(pwd)/claude-custom-skills/commands/* ~/.claude/commands/
+git clone https://github.com/seeder-works-studio/claude-custom-skills.git ~/claude-custom-skills
+ln -s ~/claude-custom-skills/commands/* ~/.claude/commands/
 ```
+
+### Option 3 — Manual copy
+
+Download or copy any `.md` file from the `commands/` folder in this repo into `~/.claude/commands/`.
+
+## Calling a skill
+
+Open any project in Claude Code and type the slash command in the chat:
+
+```
+/dev-cost-estimate
+```
+
+or pass optional arguments:
+
+```
+/dev-cost-estimate 30
+```
+
+That's it. Claude will execute the skill against your current project.
 
 ## Commands
 
