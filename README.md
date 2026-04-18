@@ -75,6 +75,23 @@ Analyzes your current project's git history and codebase to produce a profession
 - Enterprise blended: $175/hr (loaded)
 - Claude Pro: $20/month ($0.67/day)
 
+### `/demo-gate [password=demo2026]`
+
+Adds a full-site password gate to any React/Vite demo site. Prevents bots, scrapers, and phishing detectors from indexing content while giving real clients a clean, branded access experience.
+
+- Reads brand colors from `src/index.css` CSS custom properties
+- Creates a `DemoGate` component styled to match the site
+- Wraps the root `App` component — nothing renders before auth
+- Green banner explains it's a private client demo
+- Shake animation + error message on wrong password
+- Auth stored in `sessionStorage` (clears on tab close)
+
+**Usage:**
+```
+/demo-gate                      # uses default password: demo2026
+/demo-gate password=haadthip2026  # custom password
+```
+
 ## Contributing
 
 PRs welcome. Each command is a single `.md` file in `commands/`.
