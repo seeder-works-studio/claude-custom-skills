@@ -20,10 +20,25 @@ Add a full-site password gate to any React/Vite demo site. Prevents bots, scrape
 
 ## Instructions for Claude
 
-Read the project structure first:
+### Step 0 — Check if DemoGate already exists
+
+Before doing anything, check:
+
+```bash
+find src -name "DemoGate*"
+grep -r "DemoGate\|demo_gate\|demo_auth" src/
+```
+
+If `DemoGate` is already present and imported in `App.tsx` or `main.tsx`, **stop and report** to the user:
+> "DemoGate is already installed in this project — no changes needed."
+
+Only proceed if it does not exist.
+
+Read the project structure:
 
 ```
 - src/App.tsx (or App.jsx) — find the root component to wrap
+- src/main.tsx — check if wrapping here is cleaner (see Step 3)
 - src/index.css — extract CSS custom property values for brand colors
 - package.json — confirm it's a React project
 ```
@@ -99,21 +114,42 @@ Use inline styles (not Tailwind classes) so the gate renders correctly before an
 - Body: `This is a confidential product demo built for your review. It contains simulated data representative of your operation. Enter the access code provided by your [Studio] contact to continue.`
 - Bullets: workbook-backed / not indexed / not a live system
 
-### Step 3 — Wrap `App.tsx`
+### Step 3 — Choose where to wrap
 
-Import `DemoGate` and wrap the outermost JSX:
+Read `src/App.tsx` first. Pick the right wrapping strategy:
+
+**Option A — Single return in App.tsx (most common)**
+
+App has one top-level JSX return. Wrap it directly:
 
 ```tsx
 import DemoGate from "@/components/DemoGate";
 
 const App = () => (
   <DemoGate>
-    {/* existing providers and routes */}
+    <QueryClientProvider ...>
+      {/* rest of app */}
+    </QueryClientProvider>
   </DemoGate>
 );
 ```
 
-The gate must be the **outermost** wrapper — outside `QueryClientProvider`, `ThemeProvider`, `AuthProvider`, etc. — so nothing leaks before auth.
+**Option B — Multiple/conditional returns in App.tsx**
+
+App has `if (!authed) return <LoginPage />; return <Dashboard />;` style logic. Wrapping inside App gets messy. Wrap in `main.tsx` instead:
+
+```tsx
+// main.tsx
+import DemoGate from "./components/DemoGate.tsx";
+
+createRoot(document.getElementById("root")!).render(
+  <DemoGate>
+    <App />
+  </DemoGate>
+);
+```
+
+In both cases the gate must be the **outermost** wrapper so nothing leaks before auth.
 
 ### Step 4 — Verify
 
