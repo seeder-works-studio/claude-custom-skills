@@ -92,6 +92,20 @@ Adds a full-site password gate to any React/Vite demo site. Prevents bots, scrap
 /demo-gate password=haadthip2026  # custom password
 ```
 
+### `/demo-observability`
+
+Implements page view telemetry for any React/Vite demo site using the demo-observability logging layer.
+
+- Creates an analytics utility with the standard fetch snippet pointing to the telemetry worker.
+- Automatically determines the project name to use as the `demo` identifier.
+- Wires up a router listener in `App.tsx` to log `page_view` events dynamically as the user navigates.
+- Verifies the installation with a build step.
+
+**Usage:**
+```
+/demo-observability
+```
+
 ## Contributing
 
 PRs welcome. Each command is a single `.md` file in `commands/`.
